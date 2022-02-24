@@ -1,7 +1,7 @@
 
 /**GET 'Home' page === list of all available nearby locations with wifi*/
 export const homeList = (req, res, next) => {
-  res.render('index', { title: 'Express' });
+  res.render('locations_list', { title: 'Express' });
 }
 
 /**GET 'LocationInfo' page */
