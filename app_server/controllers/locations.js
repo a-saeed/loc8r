@@ -6,10 +6,10 @@ export const homeList = (req, res, next) => {
 
 /**GET 'LocationInfo' page */
 export const locationInfo = (req, res, next) => {
-  res.render('index', { title: 'Location info' });
+  res.render('location_info', { title: 'Location info' });
 }
 
 /**GET 'AddReview' page */
 export const addReview = (req, res, next) => {
-  res.render('index', { title: 'add a review' });
+  res.render('location_review_form', { title: 'add a review' });
 }

@@ -1,5 +1,5 @@
 
 /**GET 'about' page */
 export const about = (req, res, next) => {
-  res.render('index', { title: 'About' });
+  res.render('generic_text', { title: 'About' });
 }
