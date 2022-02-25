@@ -83,5 +83,10 @@ export const locationInfo = (req, res, next) => {
 
 /**GET 'AddReview' page */
 export const addReview = (req, res, next) => {
-  res.render('location_review_form', { title: 'add a review' });
+  res.render('location_review_form',
+    {
+      title: 'Review Starcups on loc8r',
+      pageHeader: { title: 'Review Starcups' }
+    }
+  );
 }
