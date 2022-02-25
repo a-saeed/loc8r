@@ -1,60 +1,21 @@
 extends layout
-
+include _includes/sharedHTMLFunctions
 block content
   .row.banner
     .col-12
-      h1 Loc8r
-        small &nbsp;Find places to work with wifi near you!
+      h1= pageHeader.title
+        small &nbsp; #{pageHeader.strapLine}
   .row
     .col-12.col-md-8
-      .card
-        .card-block
-          h4
-            a(href="/location") Starcups
-            small &nbsp;
-              i.fas.fa-star
-              i.fas.fa-star
-              i.fas.fa-star
-              i.far.fa-star
-              i.far.fa-star
-            span.badge.badge-pill.badge-default.float-right 100m
-            p.address 125 High Street, Reading, RG6 1PS
-            p.facilities
-              span.badge.badge-warning Hot drinks
-              span.badge.badge-warning Food
-              span.badge.badge-warning Premium wifi
-
-        .card-block
+      each location in locations
+        .card
+          .card-block
             h4
-              a(href="/location") Dunkin Doghonuts
-              small &nbsp;
-                i.fas.fa-star
-                i.fas.fa-star
-                i.fas.fa-star
-                i.far.fa-star
-                i.far.fa-star
-              span.badge.badge-pill.badge-default.float-right 100m
-              p.address 125 High Street, Reading, RG6 1PS
+              a(href="/location")= location.name
+              +outputRating(location.rating)
+              span.badge.badge-pill.badge-default.float-right= location.distance
+              p.address= location.address
               p.facilities
-                span.badge.badge-warning Hot drinks
-                span.badge.badge-warning Food
-                span.badge.badge-warning Premium wifi
-
-        .card-block
-          h4
-            a(href="/location") Burger Queen
-            small &nbsp;
-              i.fas.fa-star
-              i.fas.fa-star
-              i.fas.fa-star
-              i.far.fa-star
-              i.far.fa-star
-            span.badge.badge-pill.badge-default.float-right 100m
-            p.address 125 High Street, Reading, RG6 1PS
-            p.facilities
-              span.badge.badge-warning Hot drinks
-              span.badge.badge-warning Food
-              span.badge.badge-warning Premium wifi
-     
+                span.badge.badge-warning= location.facility
     .col-12.col-md-4
       p.lead Loc8r helps you find places to work when out and about. Perhaps with coffee, cake or a pint? Let Loc8r help you find the place you're looking for.
