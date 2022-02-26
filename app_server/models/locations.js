@@ -1,4 +1,14 @@
 import mongoose from "mongoose"  
+  
+const openingTimeSchema = mongoose.Schema({
+    days: String,
+    opening: String, //time
+    closing: String, //time
+    closed: {
+        type: Boolean,
+        required: true
+    }
+})
 
 const locationSchema = mongoose.Schema({
     name: { type: String, required: true },
@@ -13,7 +23,8 @@ const locationSchema = mongoose.Schema({
     coords: { //distance is resembled as geoJSON pair coordinates [longitude,latitude]
         type: String,
         coordinates: [Number]
-    }
+    },
+    openingTimes: [openingTimeSchema]
 })
 locationSchema.index({ coords: '2dsphere' }) //speed geospatial queries by using 2dsphere index
 
