@@ -30,3 +30,5 @@ process.on('SIGTERM', () => {  //for heroku app termination
         process.exit(0);
     } )
 })
+
+import './locations.js'
