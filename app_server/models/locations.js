@@ -10,6 +10,18 @@ const openingTimeSchema = mongoose.Schema({
     }
 })
 
+const reviewSchema = mongoose.Schema({
+    author: String,
+    rating: {
+        type: Number,
+        max: 5,
+        min: 0,
+        default: 0
+    },
+    reviewText: String,
+    createdOn: { type: Date, default: Date.now()}
+})
+
 const locationSchema = mongoose.Schema({
     name: { type: String, required: true },
     address: String,
@@ -24,7 +36,8 @@ const locationSchema = mongoose.Schema({
         type: String,
         coordinates: [Number]
     },
-    openingTimes: [openingTimeSchema]
+    openingTimes: [openingTimeSchema],
+    reviews: [reviewSchema]
 })
 locationSchema.index({ coords: '2dsphere' }) //speed geospatial queries by using 2dsphere index
 
