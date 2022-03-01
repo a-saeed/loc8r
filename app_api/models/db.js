@@ -4,7 +4,7 @@ import 'dotenv/config'
 
 //configure production database
 let URI = process.env.URI     
-if (NODE_ENV === 'production')
+if (process.env.NODE_ENV === 'production')
     URI = process.env.PRODUCTION_URI     
 
 mongoose.connect(URI, { useNewUrlParser: true, useUnifiedTopology: true })
@@ -35,5 +35,3 @@ process.on('SIGTERM', () => {  //for heroku app termination
         process.exit(0);
     } )
 })
-
-import './locations.js'
