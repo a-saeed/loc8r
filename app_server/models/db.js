@@ -2,7 +2,12 @@ import mongoose from 'mongoose'
 import colors from 'colors'
 import 'dotenv/config'
 
-mongoose.connect(process.env.URI, { useNewUrlParser: true, useUnifiedTopology: true })
+//configure production database
+let URI = process.env.URI     
+if (NODE_ENV === 'production')
+    URI = process.env.PRODUCTION_URI     
+
+mongoose.connect(URI, { useNewUrlParser: true, useUnifiedTopology: true })
     .then((res)=>console.log('> Connected...'.bgCyan))
     .catch(err => console.log(`> Error while connecting to mongoDB : ${err.message}`.underline.red))
 
