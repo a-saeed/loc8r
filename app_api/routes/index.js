@@ -10,14 +10,14 @@ router
     .post(locationsController.locationsCreate);
 
 router
-    .route('locations/:locationId')
+    .route('/locations/:locationId')
     .get(locationsController.locationsReadOne)
     .put(locationsController.locationsUpdateOne)
     .delete(locationsController.locationsDeleteOne);
 
 //REVIEWS
 router
-    .route('locations/:locationId/reviews')
+    .route('/locations/:locationId/reviews')
     .post(reviewsController.reviewsCreate);
 
 router
