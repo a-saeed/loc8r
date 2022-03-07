@@ -47,8 +47,38 @@ const locationsListByDistance = async (req, res, next) => {
     
 }
 
-const locationsCreate = async(req, res, next) => {
-    
+const locationsCreate = async (req, res, next) => {
+    try {
+        const newLocation = new locationModel({
+            name: req.body.name,
+            address: req.body.address,
+            facilities: req.body.facilities.split(","),
+            coords: {
+                type: "Point",
+                coordinates: [
+                    parseFloat(req.body.lng),
+                    parseFloat(req.body.lat)
+                ]
+            },
+            openingTimes: [{
+                days: req.body.days1,
+                opening: req.body.opening1,
+                closing: req.body.closing1,
+                closed: req.body.closed1
+            },
+            {
+                days: req.body.days2,
+                opening: req.body.opening2,
+                closing: req.body.closing2,
+                closed: req.body.closed2
+            }]
+        })
+
+        const location = await newLocation.save()
+        res.status(200).json(location)
+    } catch (error) {
+        next(new CustomError(404, "an error occurred " + error))
+    }
 }
 
 const locationsReadOne = async (req, res, next) => {
