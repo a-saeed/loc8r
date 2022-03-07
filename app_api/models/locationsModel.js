@@ -33,12 +33,13 @@ const locationSchema = mongoose.Schema({
     },
     facilities: [String], //array of strings
     coords: { //distance is resembled as geoJSON pair coordinates [longitude,latitude]
-        type: String,
+        type: { type: String },
         coordinates: [Number]
     },
     openingTimes: [openingTimeSchema],
     reviews: [reviewSchema]
-})
+},
+)
 locationSchema.index({ coords: '2dsphere' }) //speed geospatial queries by using 2dsphere index
 
 const locationModel = mongoose.model('locationModel', locationSchema)
