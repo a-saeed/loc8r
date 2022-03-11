@@ -134,7 +134,13 @@ const locationsUpdateOne = async(req, res, next) => {
 }
 
 const locationsDeleteOne = async(req, res, next) => {
-    
+    try {
+        const { locationId } = req.params //reading params this way prevents castToObject errors caused by mongoose
+        await locationModel.findByIdAndDelete(locationId,(err, doc))
+        res.status(204).json(null)
+    } catch (error) {
+        next(new CustomError(404, "an error occurred " + error))
+    }
 }
 
 export default {
