@@ -88,7 +88,31 @@ const reviewsUpdateOne = async(req, res, next) => {
 }
 
 const reviewsDeleteOne = async(req, res, next) => {
-    
+   try {
+       const { locationId, reviewId } = req.params;
+       console.log(locationId + " .." + reviewId);
+        if (!locationId || !reviewId)
+            return res.status(404).json({ message: "Not found, locationId and reviewId are both required" })
+        
+       const location = await locationModel.findById(locationId).select('reviews')
+       console.log(location);
+        if (!location)
+            return res.status(404).json({ message: "location not found" })
+        if (!location.reviews && !location.reviews.length > 0)
+            return res.status(404).json({ message: "location has no reviews yet" })
+        
+       const thisReview = location.reviews.id(reviewId)
+        if (!thisReview)
+            return res.status(404).json({ message: "no review found" })
+        
+        //remove review using mongoose .remove that can be applied to sub-docs, then update location rating
+        thisReview.remove()
+       updateOverallRating(location)
+       
+       res.status(200).json(location)
+   } catch (error) {
+        next(new CustomError(404, "an error occurred " + error.message))
+   }
 }
 
 /* ---------------------------- HELPER FUNCTIONS ---------------------------- */
