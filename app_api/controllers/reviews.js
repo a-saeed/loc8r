@@ -35,26 +35,23 @@ const reviewsReadOne = async(req, res, next) => {
         }
 
         //checks that the current location has reviews
-        if (location.reviews && location.reviews.length > 0) {
-            //search current location for the review with the given id. (reviews is a sub-document in location)
-            const review = location.reviews.id(req.params.reviewId)
-            if (!review) {
-                return res.status(404).json({ message: "review not found" })
-            }
-            //a review is found, return it alongside its location name and id
-            response = {
-                location: {
-                    name: location.name,
-                    id: req.params.locationId
-                },
-                review
-            }
-            return res.status(200).json(response)
-        }
+        if (!location.reviews && !location.reviews.length > 0) 
+            return res.status(404).json({ message: "this location doesn't have reviews yet" })
         
-        //current location does not have reviews, return error
-        return res.status(404).json({message: "this location doesn't have reviews yet"})
-
+        //search current location for the review with the given id. (reviews is a sub-document in location)
+        const review = location.reviews.id(req.params.reviewId)
+        if (!review) {
+            return res.status(404).json({ message: "review not found" })
+        }
+        //a review is found, return it alongside its location name and id
+        const response = {
+            location: {
+                name: location.name,
+                id: req.params.locationId
+            },
+            review
+        }
+        return res.status(200).json(response)
 
     } catch (error) {
         next(new CustomError(404, "error while getting review -> " + error))

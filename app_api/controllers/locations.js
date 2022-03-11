@@ -96,7 +96,7 @@ const locationsReadOne = async (req, res, next) => {
 const locationsUpdateOne = async(req, res, next) => {
     try {
         if (!req.params.locationId)
-            res.status(404).json("Not found, location ID is required")
+            res.status(404).json({message:"Not found, location ID is required"})
         
         const location = await locationModel.findById(req.params.locationId).select('-reviews -rating') //return doc except reviews and rating
         if (!location) {
