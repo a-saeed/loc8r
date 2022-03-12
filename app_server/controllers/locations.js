@@ -1,34 +1,35 @@
+import axios from "axios";
+/**set the environment */
+const apiOptions = {
+  server: 'http://localhost:3000'
+}
+if (process.env.NODE_ENV === 'production')
+    apiOptions.server = 'https://mighty-springs-13927.herokuapp.com'
 
-/**GET 'Home' page === list of all available nearby locations with wifi*/
+/**GET 'Home' page === list of all available nearby locations with wifi
+ * get data from app-api instead of hardcoded data
+ * 
+*/
 export const homeList = (req, res, next) => {
-  res.render('locations_list', {
-    title: 'loc8r - Find places to work with wifi near you!',
-    pageHeader: {  //page header object
-      title: 'loc8r',
-      strapLine: 'Find places to work with with wifi near you!'
-    },
-    locations: [   //array of locations objects
-      {
-      name: 'StarCups',
-      address: '125 High Street, Reading, RG6 1PS',
-      rating: '3',
-      facilities: ['Hot drinks', 'Food', 'Premium Wifi'],
-      distance: '5000m'},
-      {
-      name: 'cafeHero',
-      address: '125 High Street, Reading, RG6 1PS',
-      rating: '4',
-      facilities: ['Hot drinks', 'Food', 'Premium Wifi'],
-      distance: '200m'},
-      {
-      name: 'Burger Queen',
-      address: '125 High Street, Reading, RG6 1PS',
-      rating: '2',
-      facilities: ['Hot drinks', 'Premium Wifi'],
-      distance: '250m'
-      }
-    ] 
-  });
+  const path = '/api/locations'; //set the path of the required api
+  const requestOptions = {
+    url: `${apiOptions.server}${path}`,
+    method: 'get',
+    params: {
+        longitude: 31.158139, 
+        latitude: 30.013651,
+        maxDistance: 20
+    }
+  }
+
+  axios(requestOptions)
+    .then(response => {
+      renderHomepage(req, res, response.data)
+    })
+    .catch(err => {
+      console.log(err);
+    })
+
 }
 
 /**GET 'LocationInfo' page */
@@ -89,4 +90,21 @@ export const addReview = (req, res, next) => {
       pageHeader: { title: 'Review Starcups' }
     }
   );
+}
+
+/* --------------------------------- HELPERS -------------------------------- */
+/**
+ * Decoupling the rendering from the application logic
+ * start with the Homepage
+ */
+const renderHomepage = (req, res, responseBody) => {
+
+  res.render('locations_list', {
+    title: 'loc8r',
+    pageHeader: {  //page header object
+      title: 'loc8r',
+      strapLine: 'Find places to work with wifi near you!'
+    },
+    locations: responseBody
+  });
 }

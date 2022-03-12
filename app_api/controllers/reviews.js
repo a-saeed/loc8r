@@ -1,4 +1,3 @@
-import { response } from "express"
 import CustomError from "../models/CustomError.js"
 import locationModel from "../models/locationsModel.js"
 
