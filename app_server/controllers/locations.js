@@ -16,7 +16,7 @@ export const homeList = (req, res, next) => {
     url: `${apiOptions.server}${path}`,
     method: 'get',
     params: {
-        longitude: 31.158139, 
+        longitude: 31.218139, 
         latitude: 30.013651,
         maxDistance: 20
     }
@@ -24,7 +24,12 @@ export const homeList = (req, res, next) => {
 
   axios(requestOptions)
     .then(response => {
-      renderHomepage(req, res, response.data)
+      let data = []
+      data = response.data.map(item => {
+        item.distance = formatDistance(item.distance)
+        return item
+      })
+      renderHomepage(req, res, data)
     })
     .catch(err => {
       console.log(err);
@@ -96,7 +101,20 @@ export const addReview = (req, res, next) => {
 /**
  * Decoupling the rendering from the application logic
  * start with the Homepage
+ * format distance in kilometers
  */
+
+const formatDistance = (distance) => {
+  let thisDistance = 0
+  let unit = 'm'
+  if (distance > 1000) {
+    thisDistance = parseFloat(distance / 1000).toFixed(1) //convert to km it surpasses 1000m
+    unit = 'km'
+  }
+  else
+    thisDistance = Math.floor(distance)
+  return thisDistance + unit
+}
 const renderHomepage = (req, res, responseBody) => {
 
   res.render('locations_list', {
