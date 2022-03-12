@@ -25,14 +25,16 @@ export const homeList = (req, res, next) => {
   axios(requestOptions)
     .then(response => {
       let data = []
-      data = response.data.map(item => {
-        item.distance = formatDistance(item.distance)
-        return item
-      })
+      if (response.data.length) {  //only run if the api returned some data
+          data = response.data.map(item => {
+          item.distance = formatDistance(item.distance)
+          return item
+        })
+      }
       renderHomepage(req, res, data)
     })
     .catch(err => {
-      console.log(err);
+      renderHomepage(req, res, "");
     })
 
 }
@@ -116,13 +118,22 @@ const formatDistance = (distance) => {
   return thisDistance + unit
 }
 const renderHomepage = (req, res, responseBody) => {
-
+  let message = null
+  if (!(responseBody instanceof Array)) { //if the response isn't an array
+    message = "API lookup error"
+    responseBody = [] //return an empty array
+  }
+  else if (!responseBody.length) //if the response is an array with no length
+    message = "no places found nearby"
+  
+   //render the homepage
   res.render('locations_list', {
     title: 'loc8r',
     pageHeader: {  //page header object
       title: 'loc8r',
       strapLine: 'Find places to work with wifi near you!'
     },
-    locations: responseBody
+    locations: responseBody,
+    message
   });
 }

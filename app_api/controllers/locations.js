@@ -16,7 +16,7 @@ const locationsListByDistance = async (req, res, next) => {
             spherical: "true",
             maxDistance: 20000, //20km
         };
-        if (!longitude || !latitude) {
+        if ((!longitude && longitude !== 0 ) || (!latitude && latitude !== 0)) { //lng, lat = 0 shouldn't be a bug
             return res.status(404).json({ message: "lng and lat query strings are required" })
         }
         const results = await locationModel.aggregate([
