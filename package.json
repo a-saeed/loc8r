@@ -11,6 +11,7 @@
     "npm": ">= 8.1.2"
   },
   "dependencies": {
+    "axios": "^0.26.1",
     "colors": "^1.4.0",
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
