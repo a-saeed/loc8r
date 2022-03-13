@@ -10,16 +10,16 @@ block content
         .col-12.col-md-6
           p.rating
             +outputRating(location.rating)
-          p 125 High Street, Reading, RG6 1PS
+          p #{location.address}
           .card.card-primary
             .card-block
               h2.card-title Opening hours
               each time in location.openingTimes
-                p.card-text #{time.days}
+                p.card-text #{time.days} :  
                   if time.closed
-                    | closed
+                    |  closed
                   else 
-                    | #{time.opening} - #{ time.closing}
+                    |  #{time.opening} -  #{ time.closing}
           .card.card-primary
             .card-block
               h2.card-title Facilities
@@ -31,7 +31,7 @@ block content
             .card.card-primary
               .card-block
                 h2.card-title Location map
-                img.img-fluid.rounded(src=`http://maps.googleapis.com/maps/api/staticmap?center=${location.coords.lat},${location.coords.lng}&zoom=17&size=400x350&sensor=false&markers=${location.coords.lat},${location.coords.lng}&key={AIzaSyAXadTIlgSUzAmDSV28xhJanY4nGasfpmQ}&scale=2`)
+                img.img-fluid.rounded(src=`http://maps.googleapis.com/maps/api/staticmap?center=${location.coords.latitude},${location.coords.longitude}&zoom=17&size=400x350&sensor=false&markers=${location.coords.latitude},${location.coords.longitude}&key={AIzaSyAXadTIlgSUzAmDSV28xhJanY4nGasfpmQ}&scale=2`)
   .row
          .col-12
            .card.card-primary.review-card
@@ -44,7 +44,8 @@ block content
                      span.rating
                        +outputRating(review.rating)
                      span.reviewAuthor  #{review.author}
-                     small.reviewTimestamp  #{review.timestamp}
+                     small.reviewTimestamp 
+                       +formatDate(review.createdOn)
                    .col-12
                      p !{(review.reviewText).replace(/\n/g, '<br/>')}
   .col-12.col-lg-3
