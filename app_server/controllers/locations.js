@@ -71,6 +71,11 @@ export const addReview = (req, res, next) => {
     }
   );
 }
+
+/**Post a review through the add review page */
+export const submitReview = (req, res, next) => {
+  
+} 
 /* --------------------------------- HELPERS -------------------------------- */
 /**
  * Decoupling the rendering from the application logic
