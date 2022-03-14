@@ -47,12 +47,8 @@ export const locationInfo = (req, res, next) => {
 
 /**GET 'AddReview' page */
 export const addReview = (req, res, next) => {
-  res.render('location_review_form',
-    {
-      title: 'Review Starcups on loc8r',
-      pageHeader: { title: 'Review Starcups' }
-    }
-  );
+  const callback = (req, res, data) => { renderReviewPage(req, res, data) } //data will be destructured to only contain the location name
+  getLocationInfo(req, res, callback)
 }
 
 /**Post a review through the add review page */
@@ -143,4 +139,12 @@ const getLocationInfo = (req, res, callback) => {
     .catch(error => {
       renderError(error, req, res)
     })
+}
+const renderReviewPage = (req, res, {name}) => {  //{name} is destructured from the whole location info, as it's the only thing we need in the review page
+  res.render('location_review_form',
+    {
+      title: `Review ${name} on loc8r`,
+      pageHeader: { title: `Review ${name}` }
+    }
+  );
 }
