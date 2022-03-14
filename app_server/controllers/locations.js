@@ -57,7 +57,7 @@ export const locationInfo = (req, res, next) => {
       renderDetailPage(req, res, data)
     })
     .catch(error => {
-      console.log(error);
+      renderError(error, req, res)
     })
   
 }
@@ -118,4 +118,22 @@ const renderDetailPage = (req, res, location) => {
     },
     location
   });
+}
+
+const renderError = (error, req, res) => {
+  let title = ''
+      let content = ''
+      if (error.response.status === 404) {
+        title = '404, Page requested not found'
+        content = 'sorry, looks like the page you requested isn\'t there anymore.'
+      }
+      else {
+        title = `${error.response.status}, something went wrong`
+        content = 'something, somewhere, has gone just a little bit wrong.'
+      }
+      res.status(error.response.status)
+      res.render('generic_text', {
+        title,
+        content
+      })
 }
