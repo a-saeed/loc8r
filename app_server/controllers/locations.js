@@ -53,7 +53,26 @@ export const addReview = (req, res, next) => {
 
 /**Post a review through the add review page */
 export const submitReview = (req, res, next) => {
-  
+  const locationId = `${req.params.locationId}`
+  const path = `/api/locations/${locationId}/reviews`
+  const postData = { //map data submitted through form (name, rating, review) to the variable names that the api expects(author, rating, reviewText)
+    author: req.body.name,
+    rating: parseInt(req.body.rating, 10),
+    reviewText: req.body.review
+  }
+  const requestOptions = {
+    url: `${apiOptions.server}${path}`,
+    method: 'post',
+    data: postData //data to be sent as request body
+  }
+
+  axios(requestOptions)
+    .then(response => {
+      res.redirect(`/location/${locationId}`) //after a successful review submission, redirect to location info page
+    })
+    .catch(error => {
+      renderError(error, req, res)
+    })
 } 
 /* --------------------------------- HELPERS -------------------------------- */
 /**
