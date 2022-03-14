@@ -41,7 +41,8 @@ export const homeList = (req, res, next) => {
 
 /**GET 'LocationInfo' page */
 export const locationInfo = (req, res, next) => {
-  
+  const callback = (req, res, data) => { renderDetailPage(req, res, data)} 
+  getLocationInfo(req, res, callback)
 }
 
 /**GET 'AddReview' page */
@@ -137,7 +138,7 @@ const getLocationInfo = (req, res, callback) => {
         longitude: data.coords.coordinates[0],
         latitude: data.coords.coordinates[1]
       }
-      callback(req, res, data)
+      callback(req, res, data) //following a successful api response, invokes callback instead of a named function
     })
     .catch(error => {
       renderError(error, req, res)
