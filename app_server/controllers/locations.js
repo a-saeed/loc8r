@@ -41,24 +41,6 @@ export const homeList = (req, res, next) => {
 
 /**GET 'LocationInfo' page */
 export const locationInfo = (req, res, next) => {
-  const path = `/api/locations/${req.params.locationId}`
-  const requestOptions = {
-    url: `${apiOptions.server}${path}`,
-    method: 'get'
-  }
-
-  axios(requestOptions)
-    .then(response => {
-      const data = response.data
-      data.coords = {
-        longitude: data.coords.coordinates[0],
-        latitude: data.coords.coordinates[1]
-      }
-      renderDetailPage(req, res, data)
-    })
-    .catch(error => {
-      renderError(error, req, res)
-    })
   
 }
 
@@ -124,7 +106,6 @@ const renderDetailPage = (req, res, location) => {
     location
   });
 }
-
 const renderError = (error, req, res) => {
   let title = ''
       let content = ''
@@ -141,4 +122,24 @@ const renderError = (error, req, res) => {
         title,
         content
       })
+}
+const getLocationInfo = (req, res, callback) => {
+  const path = `/api/locations/${req.params.locationId}`
+  const requestOptions = {
+    url: `${apiOptions.server}${path}`,
+    method: 'get'
+  }
+
+  axios(requestOptions)
+    .then(response => {
+      const data = response.data
+      data.coords = {
+        longitude: data.coords.coordinates[0],
+        latitude: data.coords.coordinates[1]
+      }
+      callback(req, res, data)
+    })
+    .catch(error => {
+      renderError(error, req, res)
+    })
 }
