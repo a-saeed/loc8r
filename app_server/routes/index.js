@@ -8,7 +8,9 @@ var router = express.Router();
 /* Location pages. */
 router.get('/', homeList );
 router.get('/location/:locationId', locationInfo );
-router.get('/location/review/new', addReview );
+router
+    .route('/location/:locationId/review/new')
+    .get(addReview)
 
 /* Other pages. */
 router.get('/about', about)
