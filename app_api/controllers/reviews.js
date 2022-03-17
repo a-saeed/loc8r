@@ -18,7 +18,13 @@ const reviewsCreate = async(req, res, next) => {
          * we'll create an external function to do the next part
          * addReview is defined at end of file
          */
-         addReview(req, res, location)
+         const review = addReview(req, res, location)
+         if (review.msg == "validationError")
+             return res.status(400).json({ message: 'validationError' })
+         
+         const thisReview = location.reviews.slice(-1).pop()
+         await location.save()
+         res.status(200).json(thisReview)
     } catch (error) {
         next(new CustomError(404, "an error occurred " + error.message))
     }
@@ -125,31 +131,27 @@ const addReview = (req, res, location) => {
      * return the newly added review 
      */
     const { author, rating, reviewText } = req.body;
+    if (!author || !rating || !reviewText)  //return if any review field is empty
+        return { msg: 'validationError' }
+        
     location.reviews.push({
         author,
         rating,
         reviewText
     })
     updateOverallRating(location)
-    const thisReview = location.reviews.slice(-1).pop()
-    res.status(200).json(thisReview)
+    return {msg: "reviewAdded"} //success
 }
 
-const updateOverallRating = async (location) => {
-    try {
-        if (location.reviews && location.reviews.length > 0) {
-            const count = location.reviews.length;
-            const total = location.reviews.reduce((sum, { rating }) => { //get sum of ratings of all review sub-docs belonging to current location
-                return sum + rating
-            }, 0)
-            //update the overall rating of the location, then save it
-            location.rating = parseInt(total / count, 10)
-            await location.save()  
-            console.log("overall rating updated to " + location.rating);
-        }
-    //we don't need an action if the location doesn't have any reviews yet
-    } catch (error) {
-        throw error
+const updateOverallRating = (location) => {
+    if (location.reviews && location.reviews.length > 0) {
+        const count = location.reviews.length;
+        const total = location.reviews.reduce((sum, { rating }) => { //get sum of ratings of all review sub-docs belonging to current location
+            return sum + rating
+        }, 0)
+        //update the overall rating of the location
+        location.rating = parseInt(total / count, 10) 
+        console.log("overall rating updated to " + location.rating);
     }
 }
 
