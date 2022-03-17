@@ -60,6 +60,10 @@ export const submitReview = (req, res, next) => {
     rating: parseInt(req.body.rating, 10),
     reviewText: req.body.review
   }
+
+  if (!postData.author || !postData.rating || !postData.reviewText)
+    return res.redirect(`/location/${locationId}/review/new?error=val`)//redirect to form page, passing a flag in the query string
+  
   const requestOptions = {
     url: `${apiOptions.server}${path}`,
     method: 'post',
@@ -71,6 +75,8 @@ export const submitReview = (req, res, next) => {
       res.redirect(`/location/${locationId}`) //after a successful review submission, redirect to location info page
     })
     .catch(error => {
+      if (error.response.status === 400 && error.response.data.message == 'validationError')//api responded that form values can't be empty
+        res.redirect(`/location/${locationId}/review/new?error=val`) //redirect to form page, passing a flag in the query string
       renderError(error, req, res)
     })
 } 
@@ -163,7 +169,8 @@ const renderReviewPage = (req, res, {name}) => {  //{name} is destructured from 
   res.render('location_review_form',
     {
       title: `Review ${name} on loc8r`,
-      pageHeader: { title: `Review ${name}` }
+      pageHeader: { title: `Review ${name}` },
+      error: req.query.error //send error value to the view if a flag exists in query string
     }
   );
 }
