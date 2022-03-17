@@ -11,14 +11,15 @@ const openingTimeSchema = mongoose.Schema({
 })
 
 const reviewSchema = mongoose.Schema({
-    author: String,
+    author: {type: String, required: true},
     rating: {
         type: Number,
+        required: true,
         max: 5,
         min: 0,
         default: 0
     },
-    reviewText: String,
+    reviewText: {type: String, required: true},
     createdOn: { type: Date, default: Date.now()}
 })
 
